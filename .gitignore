@@ -1,0 +1,27 @@
+# Сборка
+bin/
+obj/
+
+# Собранный исполняемый файл
+publish/
+
+## Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# Журналы работы файрвола
+logs/
+*.csv
+
+# Локальная конфигурация: создаётся автоматически при первом запуске.
+# В репозитории лежит только шаблон rules.example.json.
+rules.json
+
+# Драйвер WinDivert подгружается из NuGet при сборке
+WinDivert.dll
+WinDivert64.sys
+
+## Временные файлы
+*.tmp
