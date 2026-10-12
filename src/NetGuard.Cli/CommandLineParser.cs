@@ -27,8 +27,17 @@ public static class CommandLineParser
 
     public static CliOptions Parse(string[] args)
     {
+        // Без аргументов запускаем файрвол с веб-панелью, а не показываем справку.
+        // Двойной клик по .exe должен запускать программу по назначению;
+        // справка в окне, которое сразу закрывается, нефункциональна.
         if (args.Length == 0)
-            return new CliOptions { Command = "help", Help = true };
+        {
+            return new CliOptions
+            {
+                Command = "run",
+                WebEnabled = true,
+            };
+        }
 
         string command = args[0].ToLowerInvariant();
         string? config = null;

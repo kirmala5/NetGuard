@@ -21,6 +21,26 @@ catch
 
 var options = CommandLineParser.Parse(args);
 
+// Повышение прав нужно только команде run: остальные (check, genconfig, rules)
+// работают без администратора, и лишний запрос UAC мешал бы пользователю.
+if (options.Command == "run" && !FirewallOptions.IsElevated())
+{
+    if (Elevation.TryRelaunchElevated(args))
+    {
+        Console.WriteLine("Запрошены права администратора для перехвата пакетов.");
+        Console.WriteLine("Продолжение работы — в новом окне.");
+        return 0;
+    }
+
+    // Пользователь отказал в повышении прав (или UAC недоступен).
+    // Файрвол работать не сможет, но веб-панель и просмотр правил — вполне,
+    // поэтому продолжаем без перехвата и честно об этом предупреждаем.
+    Console.WriteLine();
+    Console.WriteLine("Продолжение без прав администратора: перехват трафика недоступен,");
+    Console.WriteLine("веб-панель откроется, но ничего не будет фильтровать.");
+    Console.WriteLine();
+}
+
 if (options.Help || options.Command is "help" or "-h" or "--help")
 {
     Console.WriteLine(CommandLineParser.Usage);
